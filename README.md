@@ -245,6 +245,7 @@ For accessing device camera from a web page please read this link:
 > https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
 
 
+### Using Digital Signing
 ##### Use digital signature to sign documents (PDF or TXT)
 
 Write a function named onMessage and assign this function to ReactNativeWebView object. This function have a param filled by signed data and called when document signing is compelete.
