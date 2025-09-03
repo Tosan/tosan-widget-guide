@@ -293,7 +293,7 @@ Full example:
 ```
 
 ### Controll Phone Back Button
-##### Controll when user pressed back button in jetway
+##### Controll when user pressed back button in Jetway application
 
 Write a function named onMessage and assign this function to ReactNativeWebView object. This function have two param. The first param is for another apis (like camera or digital signing) and second param is an action name.
 If second param is equal to USER_BACK_PRESS, its means user pressed back button and you can do any action you want.
@@ -336,11 +336,58 @@ Full example:
        </script>
    </head>
 	<body>
-		<h1 id="div">Document: </h1>
 		<button onclick="closeWebView()">Close WebView</button>
 	</body>
 </html>
 ```
 
+### Download or share image (like receipts)
+##### When you want to provide a button for download or share image files in phone in Jetway application
 
+First of all you must be provide base64 encoded string of your image and send it to application using given instructions.
+For sharing image, write a function like this:
+
+```
+function shareImage() {
+	var data = JSON.stringify({action: 'shareImage', base64: 'put_your_base64_here'});
+	window.ReactNativeWebView.postMessage(data);
+}
+```
+
+and for downloading image like this:
+
+```
+function shareImage() {
+	var data = JSON.stringify({action: 'DOWNLOAD_IMAGE', base64: 'put_your_base64_here'});
+	window.ReactNativeWebView.postMessage(data);
+}
+```
+
+And call it.
+
+
+Full example:
+```
+<html lang="en">
+   <head>
+       <meta name="viewport" content="width=device-width, initial-scale=1">
+       <script>
+           function shareImage() {
+               var data = JSON.stringify({action: 'shareImage', base64: 'put_your_base64_here'});
+               window.ReactNativeWebView.postMessage(data);
+           }
+
+
+           function downloadImage() {
+               var data = JSON.stringify({action: 'DOWNLOAD_IMAGE', base64: 'put_your_base64_here'});
+               window.ReactNativeWebView.postMessage(data);
+           }
+       </script>
+   </head>
+	<body>
+		<button onclick="shareImage()">Share Image</button>
+		<button onclick="downloadImage()">Download Image</button>
+	</body>
+</html>
+```
    
