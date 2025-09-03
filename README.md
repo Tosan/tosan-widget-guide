@@ -295,7 +295,7 @@ Full example:
 ### Controll Phone Back Button
 ##### Controll when user pressed back button in Jetway application
 
-Write a function named onMessage and assign this function to ReactNativeWebView object. This function have two param. The first param is for another apis (like camera or digital signing) and second param is an action name.
+Write a function named onMessage and assign this function to ReactNativeWebView object. This function has two param. The first param is for another Apis (like camera or digital signing) and second param is an action name.
 If second param is equal to USER_BACK_PRESS, its means user pressed back button and you can do any action you want.
 ```
 function onMessage(data, action) {
@@ -344,7 +344,7 @@ Full example:
 ### Download or share image (like receipts)
 ##### When you want to provide a button for download or share image files in phone in Jetway application
 
-First of all you must be provide base64 encoded string of your image and send it to application using given instructions.
+First of all, you must provide base64 encoded string of your image and send it to application using given instructions.
 For sharing image, write a function like this:
 
 ```
