@@ -193,7 +193,7 @@ First of all write a function named onMessage and assign this function to ReactN
 This function have a param filled by qr data and called when qr code scanned.
 
 ```
-function onMessage(data) {
+function onMessage(data, action) {
    document.getElementById("div").innerHTML = "Camera Data: " + data;
 }
 window.ReactNativeWebView.onMessage = onMessage;
@@ -250,7 +250,7 @@ For accessing device camera from a web page please read this link:
 
 Write a function named onMessage and assign this function to ReactNativeWebView object. This function have a param filled by signed data and called when document signing is compelete.
 ```
-function onMessage(data) {
+function onMessage(data, action) {
                document.getElementById("div").innerHTML = "Document: " + data;
            }
            window.ReactNativeWebView.onMessage = onMessage;
@@ -292,7 +292,55 @@ Full example:
 </html>
 ```
 
+### Controll Phone Back Button
+##### Controll when user pressed back button in jetway
 
+Write a function named onMessage and assign this function to ReactNativeWebView object. This function have two param. The first param is for another apis (like camera or digital signing) and second param is an action name.
+If second param is equal to USER_BACK_PRESS, its means user pressed back button and you can do any action you want.
+```
+function onMessage(data, action) {
+	if (action === 'USER_BACK_PRESS') {
+		console.log('user pressed back button');
+	}
+}
+window.ReactNativeWebView.onMessage = onMessage;
+```
+
+If you want to close WebView in app, first write a function like this:
+```
+function closeWebView() {
+	var data = JSON.stringify({action: 'closeWebView'});
+	window.ReactNativeWebView.postMessage(data);
+}
+```
+And call it.
+
+
+Full example:
+```
+<html lang="en">
+   <head>
+       <meta name="viewport" content="width=device-width, initial-scale=1">
+       <script>
+           function onMessage(data, action) {
+               if (action === 'USER_BACK_PRESS') {
+               		console.log('user pressed back button');
+               }
+           }
+           window.ReactNativeWebView.onMessage = onMessage;
+
+           function closeWebView() {
+               var data = JSON.stringify({action: 'closeWebView'});
+               window.ReactNativeWebView.postMessage(data);
+           }
+       </script>
+   </head>
+	<body>
+		<h1 id="div">Document: </h1>
+		<button onclick="closeWebView()">Close WebView</button>
+	</body>
+</html>
+```
 
 
    
