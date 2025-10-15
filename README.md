@@ -342,7 +342,7 @@ Full example:
 ```
 
 ### Download or share image (like receipts)
-##### When you want to provide a button for download or share image files in phone in Jetway application
+##### When you want to provide a button for download or share image files in phone in Jetway application.
 
 First of all, you must provide base64 encoded string of your image and send it to application using given instructions.
 For sharing image, write a function like this:
