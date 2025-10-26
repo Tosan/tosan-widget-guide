@@ -17,7 +17,7 @@ WIDE | 630 px | 216 px
 MEDIUM | 630 px | 445 px
 FULL | 900 px | 400 px
 
-2. get clientId and clientSecret from suppurt operation team of tosan in specified bank.
+2. get clientId and clientSecret from suppurt operation team of tosan in the specified bank.
 
 3. To register a widget, you must call "saveWidget" service from yaghut with required inputs .
 ### schema of "saveWidget" service:
@@ -100,116 +100,120 @@ this token must be encoded by the widget and its payload contains the below info
 
 > language is the selected language which is selected in Netway by the user.
 
-> The widget can call  WidgetStore login service with the ssoToken.**it's disposable**
+> The widget can call  Yaghut login service with the ssoToken, clientId, clientSecret.(the service name in yahgut is: loginOauthClientSSOToken)
 
 > ssoTokenExpirationTime is the ssoToken expiration date.
 
-### Calling the WidgetStore login service
-To call the WidgetStore login you must call this URL: 
+### Calling the Yaghut login service
+To login in yaghut by soap protocol you can use wsdl like: 
 
-> https://wistore-api-url/v1/auth/market/login
+> https://yaghut-api-url/yaghut/soap/soap_profileName?wsdl
 
-> HTTP Method: POST
-
-You must set these parameters in the header of request
-
-```
-App-Key: YOUR-WIDGET-APPKEY
-Device-Id: 192.168.1.1
-Accept-Language: fa
-Content-Type: application/json
-ACCEPT: application/json
-CLIENT-IP-ADDRESS: 192.168.1.1
-CLIENT-PLATFORM-TYPE: ANDROID
-CLIENT-DEVICE-ID: 192.168.1.1
-CLIENT-USER-ID: 091212*****
-CLIENT-USER-AGENT: Android - Android 5.1 - Sumsung - Gallexy8
-```
-
-You must set these parameters in the body of request
-
-```
-"username":"YOUR-WIDGET-STORE-USERNAME",
-"password":"YOUR-WIDGET-PASSWORD"
-```
-
-The body of response is
-
-```
-"token":"dnfghsfl45md4df.ww/dsf5;ldsfksd,sfsdl",
-"first_name":"USER-FIRST-NAME",
-"last_name":"USER-LAST-NAME"
-```
-
-Then you must call this service with this URL:
-
-> https://wistore-api-url/v1/auth/login/token
+for rest request you can call this URL:
+> https://yaghut-api-url/yaghut/rest/tosan/user/loginOauthClientSSOToken 
 
 > HTTP Method: POST
 
-You must set these parameters in the header of request
+You must set (clientId, clientSecret, SSOToken) parameters in the body of request:
+
+SOAP Sample:
+```
+soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.yaghut.modern.tosan.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ser:loginOauthClientSSOToken>
+         <!--Optional:-->
+         <context>
+            <!--Zero or more repetitions:-->
+            <data>
+               <!--Optional:-->
+               <key>?</key>
+               <!--Optional:-->
+               <value>?</value>
+            </data>
+         </context>
+         <!--Optional:-->
+         <request>
+            <clientId>?</clientId>
+            <clientSecret>?</clientSecret>
+            <!--Optional:-->
+            <loadCurrentValidSession>?</loadCurrentValidSession>
+            <SSOToken>?</SSOToken>
+         </request>
+      </ser:loginOauthClientSSOToken>
+   </soapenv:Body>
+</soapenv:Envelope>
+```
+
+The body of response has a sessionId for specified user that login in netway and intract with current widget
 
 ```
-App-Key: YOUR-WIDGET-APPKEY
-Device-Id: 192.168.1.1
-Accept-Language: fa
-Content-Type: application/json
-ACCEPT: application/json
-CLIENT-IP-ADDRESS: 192.168.1.1
-CLIENT-PLATFORM-TYPE: ANDROID
-CLIENT-DEVICE-ID: 192.168.1.1
-CLIENT-USER-ID: 091212*****
-CLIENT-USER-AGENT: Android - Android 5.1 - Sumsung - Gallexy8
-Bank-Id:The-BankCode-You-Get-From-ssoJwt
-token-Id:The-Token-Youe-Get-From-The-Previous-Service 
+/**
+* شناسه جلسه کاری
+*/
+String sessionId;
+Date lastLoginTime;//تاریخ و زمان آخرین ورود به سیستم
+String name;//نام و نام خانوادگی
+String foreignName;// مقدار این فیلد معادل نام است، نام نیز با توجه به زبان انتخابی مقدار خواهد گرفت
+String title;//عنوان
+Set<SubscriberUserInfoBean> subscribers;
+String cif;//شماره مشتری
+String mobile;//شماره موبایل
+String email;//ایمیل
+/**
+* تاریخ انقضای سشن
+*/
+Date sessionExpirationDate;
+	.
+	.
+	.
 ```
-You must set these parameters in the body of request
-
-```
-"token":"ssoToken-You-Get-From-ssoJwt"
-```
-
-The body of response is
-
-```
-"code":"USER-CODE",
-"gender":"USER-GENDER",
-"name":"USER-FULL-NAME",
-"session_id":"SESSION-ID",
-"customer_number":"CUSTOMER-BANK-NUMBER",
-"bankCode":"BANK-SWIFT-CODE",
-"loginToken":"LOGIN-TOKEN"
-```
+with this sessionId you can call some of banking services.
 
 ### Calling the deposit list service(a banking service)
 To call the the deposit list service you must call this URL: 
 
-> https://wistore-api-url/v1/deposits
+for rest request you can call this URL:
+> https://yaghut-api-url/yaghut/rest/tosan/deposit
 
 > HTTP Method: POST
 
-You must set these parameters in the header of request
 
+SOAP Sample:
 ```
-App-Key: YOUR-WIDGET-APPKEY
-Device-Id: 192.168.1.1
-Accept-Language: fa
-Content-Type: application/json
-ACCEPT: application/json
-CLIENT-IP-ADDRESS: 192.168.1.1
-CLIENT-PLATFORM-TYPE: ANDROID
-CLIENT-DEVICE-ID: 192.168.1.1
-CLIENT-USER-ID: 091212*****
-CLIENT-USER-AGENT: Android - Android 5.1 - Sumsung - Gallexy8
-Bank-Id:The-BankCode-You-Get-From-The-Previous-Service
-session:The-session-You-Get-From-The-Previous-Service 
+soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.yaghut.modern.tosan.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ser:getDeposits>
+         <!--Optional:-->
+         <context>
+            <!--Zero or more repetitions:-->
+            <data>
+               <key>SESSIONID</key>
+               <value>806b5a9c-4e3e-4775-be07-bab0dac375a8</value>
+            </data>
+         </context>
+         <!--Optional:-->
+         <request>
+            <length>10</length> 
+            <offset>0</offset>
+         </request>
+      </ser:getDeposits>
+   </soapenv:Body>
+</soapenv:Envelope>
 ```
 
 The body of response is a list of the below object
 
 ```
-"deposit_number":"DEPOSIT-NUMBER",
-"balance":"DEPOSIT-BALANCE"
+/**
+* فهرستی از اطلاعات سپرده
+*/
+List<DepositBean> depositBeans;
+/**
+* تعداد کل سپرده های بازگشتی
+*/
+long totalRecord;
 ```
 
 ### Using Device Camera
