@@ -422,3 +422,37 @@ Full example:
 </html>
 ```
    
+
+
+### Receive OTP messages
+##### Listen to message event and receive OTP sms
+
+Write a function to start listening messages, and call this function when you need.
+And write a finction and assign it to onMessage event to receive data.
+After using messgae, send endOtp action to stop listening:
+
+```
+
+       <script>
+           function onMessage(data, action) {
+               if (action === 'OTP') {
+               		console.log('this is OTP message', data);
+               }
+           }
+           window.ReactNativeWebView.onMessage = onMessage;
+
+			function startListenToOTP() {
+				var data = JSON.stringify({action: 'startOtp'});
+				window.ReactNativeWebView.postMessage(data);
+			}
+
+			function endListenToOTP() {
+				var data = JSON.stringify({action: 'endOtp'});
+				window.ReactNativeWebView.postMessage(data);
+			}
+       </script>
+
+```
+
+
+   
